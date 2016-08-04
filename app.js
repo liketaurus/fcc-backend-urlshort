@@ -2,6 +2,10 @@ var express = require('express');
 var path = require('path');
 var mongo = require('mongodb');
 var app = express();
+var api = require('./api.js');
+var dotenv=require('dotenv').config({
+  silent: true
+});
 var port = process.env.PORT || 8080;
 var url = process.env.MONGOLAB_URI || "mongodb://liketaurus-fcc-back-full-3539759:27017/liketaurusurls";
 
@@ -26,16 +30,18 @@ mongo.MongoClient.connect(url, function(err, db) {
   } else {
     console.log('Successfully connected to MongoDB on port 27017.');
   }
-  
-   db.createCollection("sites", {
+ 
+
+  db.createCollection("links", {
     capped: true,
     size: 5000000,
     max: 5000
   });
   
+  console.log(process.env.MONGOLAB_URI);
+  console.log(process.env.APP_URL);
+  api(app, db);
   
-  
-  db.close();
 });
 
 
