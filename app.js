@@ -1,35 +1,43 @@
 var express = require('express');
+var path = require('path');
+var mongo = require('mongodb');
 var app = express();
 var port = process.env.PORT || 8080;
+var url = process.env.MONGOLAB_URI || "mongodb://liketaurus-fcc-back-full-3539759:27017/liketaurusurls";
+
+app.engine('html', require('ejs').renderFile);
 
 app.route('/')
     .get(function(req, res) {
       res.sendFile(process.cwd() + '/ui/index.html');
     });
-
-// app.get('/:query', function(req, res) {
-//     var date = req.params.query;
-//     var unix = null;
-//     var natural = null;
-
-//     if (moment(date, "MMMM D, YYYY").isValid()) {
-//         unix = naturalToUnix(date);
-//         natural = unixToNatural(unix);
-//     }
     
-//     var n= Number(date);
-//     if (n >= 0) {
-//         unix = n;
-//         natural = unixToNatural(unix);
-//     }
+app.route('/new')
+    .get(function(req, res) {
+      res.render(process.cwd() + '/ui/error.html', {
+        err: "You need to add a proper url after the '/new/' url portion"
+      });
+    });
 
-//     var dateObj = {
-//         "unix": unix,
-//         "natural": natural
-//     };
-//     res.send(dateObj);
+mongo.MongoClient.connect(url, function(err, db) {
 
-// });
+  if (err) {
+    throw new Error('Database failed to connect!');
+  } else {
+    console.log('Successfully connected to MongoDB on port 27017.');
+  }
+  
+   db.createCollection("sites", {
+    capped: true,
+    size: 5000000,
+    max: 5000
+  });
+  
+  
+  
+  db.close();
+});
+
 
 app.listen(port, function() {
     console.log('Application started on port ' + port);
