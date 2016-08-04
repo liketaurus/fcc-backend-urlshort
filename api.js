@@ -58,10 +58,10 @@ module.exports = function(app, db) {
                 res.redirect(result.full);
             }
             else {
-                res.send({
-                    "error": "Our DB doesn't contains this url!"
+                res.render(process.cwd() + '/ui/error.html', {
+                    err: "Our DB doesn't contains this url!"
                 });
-            }
+           }
         });
     }
 
