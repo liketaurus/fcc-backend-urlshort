@@ -14,3 +14,5 @@ After Deploying to Heroku, we need to set the environment variable. To do this, 
     heroku config:set MONGOLAB_URI=mongodb://<dbuser>:<dbpassword>@ds139735.mlab.com:39735/liketaurusurls
 
 Thats all, folks!
+
+[Source](https://github.com/FreeCodeCamp/FreeCodeCamp/wiki/Using-MongoDB-And-Deploying-To-Heroku)
